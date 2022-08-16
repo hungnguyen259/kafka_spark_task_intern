@@ -9,7 +9,7 @@ public class Tasks {
                 .appName("spark tasks")
                 .getOrCreate();
 
-        String sourceFile = "kafka_tasks_data/*/*/*";
+        String sourceFile = "kafka_tasks_data";
         String destinationFolder = "spark_tasks_data";
 
         Dataset<Row> df = spark
