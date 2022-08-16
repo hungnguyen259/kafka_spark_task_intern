@@ -13,7 +13,7 @@ public class Tasks {
                 .appName("spark tasks")
                 .getOrCreate();
 
-        String sourceFile = "test_dir";
+        String sourceFile = "test";
         String destinationFolder = "spark_tasks_data";
 
         Dataset<Row> df = spark
@@ -47,28 +47,5 @@ public class Tasks {
         ex3.show();
 	ex4.show();
 	ex5.show();
-        StructType structType = new StructType();
-        structType = structType.add("guid", DataTypes.IntegerType, true);
-        structType = structType.add("cov", DataTypes.IntegerType, true);
-        structType = structType.add("campaign", DataTypes.IntegerType, true);
-        structType = structType.add("location", DataTypes.IntegerType, true);
-        List<Row> nums = new ArrayList<Row>();
-        nums.add(RowFactory.create(1,1,1,7));
-        nums.add(RowFactory.create(1,1,1,9));
-        nums.add(RowFactory.create(1,0,1,7));
-        nums.add(RowFactory.create(2,1,2,7));
-        nums.add(RowFactory.create(2,0,2,7));
-        nums.add(RowFactory.create(3,1,2,8));
-        nums.add(RowFactory.create(4,0,2,8));
-        nums.add(RowFactory.create(4,0,2,8));
-        nums.add(RowFactory.create(5,0,2,9));
-        nums.add(RowFactory.create(5,1,3,9));
-        nums.add(RowFactory.create(6,0,3,8));
-        nums.add(RowFactory.create(7,1,3,8));
-        nums.add(RowFactory.create(6,1,3,8));
-        nums.add(RowFactory.create(7,0,3,8));
-        Dataset<Row> res3 = spark.createDataFrame(nums, structType);
-        res3.write().option("delimiter", ";").option("header", "true").mode(SaveMode.Overwrite).parquet( "test");
-
     }
 }
