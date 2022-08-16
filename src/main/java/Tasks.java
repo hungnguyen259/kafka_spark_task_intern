@@ -14,8 +14,9 @@ public class Tasks {
 
         Dataset<Row> df = spark
                 .read()
+                .option("mergeSchema", "true")
                 .parquet(sourceFile);
-        df.select("year").select("month").select("day").show();
+        df.show();
 
     }
 }
