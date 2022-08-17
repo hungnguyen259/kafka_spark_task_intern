@@ -45,7 +45,6 @@ public class Task {
                 "from df1 right join df2 " +
                 "on df1.date=df2.date and df1.campaign=df2.campaign and df1.cov=0 " +
                 "order by df2.date desc, df2.campaign desc");
-        ex1.write().option("delimiter", ";").option("header", "true").mode(SaveMode.Overwrite).csv(resultFolder + "/resultExercise1");
 
 
 //        Tìm số lượng click, tỉ lệ view ứng với mỗi campaign theo location
@@ -57,7 +56,6 @@ public class Task {
                 "from df3 right join df4 " +
                 "on df4.date=df3.date and df3.campaign=df4.campaign and df3.location=df4.location and df3.cov=0 " +
                 "order by df4.date desc, df4.location desc, df4.campaign desc");
-        ex2.write().option("delimiter", ";").option("header", "true").mode(SaveMode.Overwrite).csv(resultFolder + "/resultExercise2");
 
 //        Tìm tỉ lệ click, tỉ lệ view ứng vỡi mỗi campaign
 //        Dataset<Row> df1 = df.groupBy("date", "campaign", "cov").count();
@@ -88,7 +86,6 @@ public class Task {
         Dataset<Row> ex3 = df.groupBy("date", "campaign")
                 .agg(countDistinct("guid").alias("count")).
                 orderBy(col("date").desc(), col("campaign").desc());
-        ex3.write().option("delimiter", ";").option("header", "true").mode(SaveMode.Overwrite).csv(resultFolder + "/resultExercise3");
 
 //      Số lượng user truy cập nhiều hơn một campaign
         Dataset<Row> ex4 = df.groupBy("date", "guid")
@@ -96,7 +93,6 @@ public class Task {
                 .filter("count>1")
                 .groupBy("date").agg(count("guid"))
                 .orderBy(col("date").desc());
-        ex4.write().option("delimiter", ";").option("header", "true").mode(SaveMode.Overwrite).csv(resultFolder + "/resultExercise4");
 
         try{
             ex1.writeStream()
