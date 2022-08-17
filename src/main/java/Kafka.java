@@ -16,7 +16,7 @@ public class Kafka {
         String checkpoint = "/tmp/task_intern";
         SparkSession spark = SparkSession
                 .builder()
-                .appName("kafka_tasks")
+                .appName("kafka")
                 .getOrCreate();
 
         Dataset<Row> data = spark
@@ -69,7 +69,7 @@ public class Kafka {
                     .outputMode("append")
                     .option("path", savedDataLocation)
                     .option("header", true)
-                    .option("checkpointLocation", checkpoint)
+                    .option("checkpointLocation", checkpoint +"/data")
                     .trigger(Trigger.ProcessingTime("3 minute"))
                     .partitionBy("year", "month", "day")
                     .start()
