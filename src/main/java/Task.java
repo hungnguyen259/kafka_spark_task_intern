@@ -102,7 +102,7 @@ public class Task {
                     .option("header", true)
                     .option("checkpointLocation", checkpoint+ "/ex1")
                     .trigger(Trigger.ProcessingTime("60 seconds"))
-                    .partitionBy("year", "month", "day")
+                    .partitionBy("date")
                     .start()
                     .awaitTermination();
         }
@@ -117,7 +117,7 @@ public class Task {
                     .option("header", true)
                     .option("checkpointLocation", checkpoint+ "/ex2")
                     .trigger(Trigger.ProcessingTime("60 seconds"))
-                    .partitionBy("year", "month", "day")
+                    .partitionBy("date")
                     .start()
                     .awaitTermination();
         }
@@ -132,7 +132,7 @@ public class Task {
                     .option("header", true)
                     .option("checkpointLocation", checkpoint + "/ex3")
                     .trigger(Trigger.ProcessingTime("60 seconds"))
-                    .partitionBy("year", "month", "day")
+                    .partitionBy("date")
                     .start()
                     .awaitTermination();
         }
@@ -147,7 +147,7 @@ public class Task {
                     .option("header", true)
                     .option("checkpointLocation", checkpoint+ "/ex4")
                     .trigger(Trigger.ProcessingTime("60 seconds"))
-                    .partitionBy("year", "month", "day")
+                    .partitionBy("date")
                     .start()
                     .awaitTermination();
         }
