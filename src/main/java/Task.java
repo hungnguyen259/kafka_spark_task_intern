@@ -7,9 +7,9 @@ import java.util.concurrent.TimeoutException;
 import static org.apache.spark.sql.functions.*;
 
 public class Task {
-    String resultFolder = "task_intern/result";
-    String checkpoint ="tmp/task_intern";
-    String sourceFile = "task_intern/data";
+    String resultFolder = "test/result";
+    String checkpoint ="tmp/test";
+    String sourceFile = "test/data";
 
     public Dataset<Row> read(){
         SparkSession spark = SparkSession
@@ -101,9 +101,6 @@ public class Task {
         catch (TimeoutException|StreamingQueryException e){
             e.printStackTrace();
         }
-
-
-
 
 //        Tìm tỉ lệ click, tỉ lệ view ứng vỡi mỗi campaign
 //        Dataset<Row> df1 = df.groupBy("date", "campaign", "cov").count();
