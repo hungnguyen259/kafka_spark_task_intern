@@ -82,7 +82,6 @@ public class Task {
                         Dataset<Row> ex4 = dataframe.groupBy("date", "guid")
                                 .agg(count("campaign").as("count"))
                                 .filter("count>1")
-                                .filter("cast(campaign as decimal) is not null")
                                 .groupBy("date").agg(count("guid"))
                                 .orderBy(col("date").desc());
 
