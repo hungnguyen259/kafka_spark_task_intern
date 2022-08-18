@@ -1,44 +1,56 @@
 import org.apache.spark.sql.*;
 import org.apache.spark.sql.streaming.StreamingQueryException;
 import org.apache.spark.sql.streaming.Trigger;
-import org.apache.spark.sql.types.DataTypes;
-import org.apache.spark.sql.types.StructField;
-import org.apache.spark.sql.types.StructType;
 
 import java.util.concurrent.TimeoutException;
 
 import static org.apache.spark.sql.functions.*;
 
 public class Task2 {
+    String resultFolder = "task_intern/result";
+    String checkpoint ="tmp/task_intern";
+    String sourceFile = "task_intern/data";
 
+    public void write(Dataset<Row> df, String path) {
+        df
+                .write()
+                .format("csv")
+                .mode("append")
+                .option("path", resultFolder + path)
+                .option("header", true)
+                .option("checkpointLocation", checkpoint+ path)
+                .partitionBy("date")
+                .save();
 
-    public static void main(String[] args) {
-        final String resultFolder = "task_intern/result";
-        final String checkpoint ="tmp/task_intern";
-        StructType schema = DataTypes.createStructType(new StructField[] {
-                DataTypes.createStructField("campaign", DataTypes.IntegerType, true),
-                DataTypes.createStructField("cov", DataTypes.IntegerType, true),
-                DataTypes.createStructField("location", DataTypes.IntegerType, true),
-                DataTypes.createStructField("guid", DataTypes.IntegerType, true) }
-        );
+    }
 
+    public Dataset<Row> read(){
         SparkSession spark = SparkSession
                 .builder()
                 .appName("spark tasks")
                 .getOrCreate();
 
-        String sourceFile = "task_intern/data";
+        spark.sql("set spark.sql.streaming.schemaInference=true");
         Dataset<Row> df = spark
                 .readStream()
-                .schema(schema)
                 .option("mergeSchema", "true")
                 .parquet(sourceFile)
                 .select("campaign", "cov", "location", "guid", "year", "month", "day")
                 .withColumn("date", expr("make_date(year, month, day)"));
+        return df;
+    }
+
+
+    public static void main(String[] args) {
+
+        Task2 task = new Task2();
+        Dataset<Row> df = task.read();
 
         try{
             df.writeStream()
                     .foreachBatch((dataframe, batchId) ->{
+
+                        //        Số lượng click, view ứng với mỗi campaign
                         Dataset<Row> df1 = dataframe.groupBy("date", "campaign", "cov").count();
                         Dataset<Row> df2 = dataframe.groupBy("date", "campaign").count();
                         df1.createOrReplaceTempView("df1");
@@ -47,16 +59,36 @@ public class Task2 {
                                 "from df1 right join df2 " +
                                 "on df1.date=df2.date and df1.campaign=df2.campaign and df1.cov=0 " +
                                 "order by df2.date desc, df2.campaign desc");
-                        ex1
-                                .write()
-                                .format("csv")
-                                .mode("append")
-                                .option("path", resultFolder + "/ex1")
-                                .option("header", true)
-                                .option("checkpointLocation", checkpoint+ "/ex1")
-                                .partitionBy("date");
+
+// Số lương click, view môi campaign theo location
+                        Dataset<Row> df3 = dataframe.groupBy("date", "location", "campaign", "cov").count();
+                        Dataset<Row> df4 = dataframe.groupBy("date", "location", "campaign").count();
+                        df3.createOrReplaceTempView("df3");
+                        df4.createOrReplaceTempView("df4");
+                        Dataset<Row> ex2 = dataframe.sparkSession().sql("select df4.date, df4.location, df4.campaign, df4.count as sum, ifnull(df3.count, 0) as view, ifnull(df4.count-df3.count, df4.count) as click " +
+                                "from df3 right join df4 " +
+                                "on df4.date=df3.date and df3.campaign=df4.campaign and df3.location=df4.location and df3.cov=0 " +
+                                "order by df4.date desc, df4.location desc, df4.campaign desc");
+
+
+                        //      Số lượng user truy cập ứng với mỗi campaign
+                        Dataset<Row> ex3 = dataframe.groupBy("date", "campaign")
+                                .agg(countDistinct("guid").alias("count")).
+                                orderBy(col("date").desc(), col("campaign").desc());
+
+                        //      Số lượng user truy cập nhiều hơn một campaign
+                        Dataset<Row> ex4 = dataframe.groupBy("date", "guid")
+                                .agg(count("campaign").as("count"))
+                                .filter("count>1")
+                                .groupBy("date").agg(count("guid"))
+                                .orderBy(col("date").desc());
+
+                        task.write(ex1, "/ex1");
+                        task.write(ex2, "/ex2");
+                        task.write(ex3, "/ex3");
+                        task.write(ex4, "/ex4");
                     })
-                    .trigger(Trigger.ProcessingTime("60 seconds"))
+                    .trigger(Trigger.ProcessingTime("3 minute"))
                     .start()
                     .awaitTermination();
         }
@@ -64,7 +96,6 @@ public class Task2 {
             e.printStackTrace();
         }
 
-        //        Số lượng click, view ứng với mỗi campaign
 
 
 
