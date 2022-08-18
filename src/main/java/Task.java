@@ -22,7 +22,7 @@ public class Task {
         Dataset<Row> df2 = df.groupBy("date", "campaign").count();
         df1.createOrReplaceTempView("df1");
         df2.createOrReplaceTempView("df2");
-        Dataset<Row> ex1 = spark.sql("select df2.date, df2.campaign, ifnull(df1.count, 0) as view, ifnull(df2.sum-df1.count, sum) as click " +
+        Dataset<Row> ex1 = spark.sql("select df2.date, df2.campaign, ifnull(df1.count, 0) as view, ifnull(df2.count-df1.count, df1.count) as click " +
                 "from df1 right join df2 " +
                 "on df1.date=df2.date and df1.campaign=df2.campaign and df1.cov=0 " +
                 "order by df2.date desc, df2.campaign desc");
@@ -52,7 +52,7 @@ public class Task {
         Dataset<Row> df4 = df.groupBy("date", "location", "campaign").count();
         df3.createOrReplaceTempView("df3");
         df4.createOrReplaceTempView("df4");
-        Dataset<Row> ex2 = spark.sql("select df4.date, df4.location, df4.campaign, df4.sum, ifnull(df3.count, 0) as view, ifnull(df4.sum-df3.count, sum) as click " +
+        Dataset<Row> ex2 = spark.sql("select df4.date, df4.location, df4.campaign, df4.count as sum, ifnull(df3.count, 0) as view, ifnull(df4.count-df3.count, df4.count) as click " +
                 "from df3 right join df4 " +
                 "on df4.date=df3.date and df3.campaign=df4.campaign and df3.location=df4.location and df3.cov=0 " +
                 "order by df4.date desc, df4.location desc, df4.campaign desc");
