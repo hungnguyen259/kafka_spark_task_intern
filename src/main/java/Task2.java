@@ -60,7 +60,7 @@ public class Task2 {
                                 "on df1.date=df2.date and df1.campaign=df2.campaign and df1.cov=0 " +
                                 "order by df2.date desc, df2.campaign desc");
 
-// Số lương click, view môi campaign theo location
+                        // Số lương click, view môi campaign theo location
                         Dataset<Row> df3 = dataframe.groupBy("date", "location", "campaign", "cov").count();
                         Dataset<Row> df4 = dataframe.groupBy("date", "location", "campaign").count();
                         df3.createOrReplaceTempView("df3");
