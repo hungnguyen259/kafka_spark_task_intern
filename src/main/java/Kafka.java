@@ -64,13 +64,15 @@ public class Kafka {
 
 
         try {
-            df.writeStream()
+            df
+            .coalesce(1)
+                    .writeStream()
                     .format("parquet")
                     .outputMode("append")
                     .option("path", savedDataLocation)
                     .option("header", true)
                     .option("checkpointLocation", checkpoint +"/data")
-                    .trigger(Trigger.ProcessingTime("3 minute"))
+                    .trigger(Trigger.ProcessingTime("5 minute"))
                     .partitionBy("year", "month", "day")
                     .start()
                     .awaitTermination();

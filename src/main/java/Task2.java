@@ -13,6 +13,7 @@ public class Task2 {
 
     public void write(Dataset<Row> df, String path) {
         df
+                .coalesce(1)
                 .write()
                 .format("csv")
                 .mode("append")
@@ -88,7 +89,7 @@ public class Task2 {
                         task.write(ex3, "/ex3");
                         task.write(ex4, "/ex4");
                     })
-                    .trigger(Trigger.ProcessingTime("3 minute"))
+                    .trigger(Trigger.ProcessingTime("5 minute"))
                     .start()
                     .awaitTermination();
         }
