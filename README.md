@@ -23,3 +23,4 @@ spark-submit --class Tasks --master yarn --deploy-mode cluster --executor-memory
 - Dữ liệu được lưu vào ~/spark_task_intern/data trong hdfs, phân vùng theo năm - tháng -ngày.
 - Kết quả spark job được lưu vào ~/spark_task_intern/result trong hdfs, phân vùng theo từng câu truy vấn, theo ngày.
 
+
