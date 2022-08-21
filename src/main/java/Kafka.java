@@ -13,7 +13,7 @@ public class Kafka {
         String kafkaServer = "10.3.68.20:9092, 10.3.68.21:9092, 10.3.68.23:9092, 10.3.68.26:9092, 10.3.68.28:9092, 10.3.68.32:9092, 10.3.68.47:9092, 10.3.68.48:9092, 10.3.68.50:9092, 10.3.68.52:9092";
         String kafkaTopic = "rt-queue_1";
         String savedDataLocation = "spark_task_intern/data";
-        String checkpoint = "checkpoint/spark_task_intern/Kafka";
+        String checkpoint = "spark_task_intern/checkpoint/Kafka";
         SparkSession spark = SparkSession
                 .builder()
                 .appName("kafka")

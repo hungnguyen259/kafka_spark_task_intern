@@ -6,9 +6,9 @@ import java.util.concurrent.TimeoutException;
 
 import static org.apache.spark.sql.functions.*;
 
-public class Task {
+public class Tasks {
     String resultFolder = "spark_task_intern/result";
-    String checkpoint ="checkpoint/spark_task_intern/Task";
+    String checkpoint ="spark_task_intern/checkpoint/Task";
     String sourceFile = "spark_task_intern/data";
 
     public Dataset<Row> read(){
@@ -43,7 +43,7 @@ public class Task {
 
     public static void main(String[] args) {
 
-        Task task = new Task();
+        Tasks task = new Tasks();
         Dataset<Row> df = task.read();
 
         try{
