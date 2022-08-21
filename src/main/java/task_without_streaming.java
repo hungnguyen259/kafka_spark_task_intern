@@ -9,8 +9,8 @@ public class task_without_streaming {
                 .appName("spark tasks")
                 .getOrCreate();
 
-        String sourceFile = "test2";
-        String resultFolder = "resulttest2";
+        String sourceFile = "spark_tasks_intern/data";
+        String resultFolder = "resulttest";
 
         Dataset<Row> df = spark
                 .read()

@@ -7,9 +7,9 @@ import java.util.concurrent.TimeoutException;
 import static org.apache.spark.sql.functions.*;
 
 public class Task {
-    String resultFolder = "test/result";
-    String checkpoint ="tmp/test";
-    String sourceFile = "test/data";
+    String resultFolder = "spark_task_intern/result";
+    String checkpoint ="checkpoint/spark_task_intern/Task";
+    String sourceFile = "spark_task_intern/data";
 
     public Dataset<Row> read(){
         SparkSession spark = SparkSession
@@ -94,7 +94,7 @@ public class Task {
                         dataframe.unpersist();
 
                     })
-                    .trigger(Trigger.ProcessingTime("5 minute"))
+                    .trigger(Trigger.ProcessingTime("60 minute"))
                     .start()
                     .awaitTermination();
         }
