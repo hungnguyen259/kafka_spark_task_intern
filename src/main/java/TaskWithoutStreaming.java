@@ -14,7 +14,7 @@ public class TaskWithoutStreaming {
                 .appName("spark tasks")
                 .getOrCreate();
 
-        String sourceFile = "spark_tasks_intern/data";
+        String sourceFile = "spark_task_intern/data";
         String resultFolder = "resulttest";
 
         Dataset<Row> df = spark

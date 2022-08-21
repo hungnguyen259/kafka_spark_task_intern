@@ -9,7 +9,7 @@ import java.util.concurrent.TimeoutException;
 import static org.apache.spark.sql.functions.*;
 
 //Thực hiện các truy vấn dữ liệu trong hdfs với spark
-public class Tasks {
+public class Task {
     private final String resultFolder = "spark_task_intern/result";
     private final String checkpoint = "spark_task_intern/checkpoint/Task";
     private final String sourceFile = "spark_task_intern/data";
@@ -44,7 +44,7 @@ public class Tasks {
     }
     public static void main(String[] args) {
 
-        Tasks task = new Tasks();
+        Task task = new Task();
         Dataset<Row> df = task.read();
 
         try {
