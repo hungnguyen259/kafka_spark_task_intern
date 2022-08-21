@@ -1,7 +1,7 @@
 import org.apache.spark.sql.*;
 import static org.apache.spark.sql.functions.*;
 
-public class task_without_streaming {
+public class TaskWithoutStreaming {
 
     public static void main(String[] args) {
         SparkSession spark = SparkSession
@@ -29,7 +29,12 @@ public class task_without_streaming {
                 "on df1.date=df2.date and df1.campaign=df2.campaign and df1.cov=0 " +
                 "order by df2.date desc, df2.campaign desc");
         ex1.show();
-        ex1.write().option("delimiter", ";").option("header", "true").mode(SaveMode.Overwrite).csv(resultFolder + "/resultExercise1");
+        ex1
+                .write()
+                .option("delimiter", ";")
+                .option("header", "true")
+                .mode(SaveMode.Overwrite)
+                .csv(resultFolder + "/resultExercise1");
 
 
 //        Tìm số lượng click, tỉ lệ view ứng với mỗi campaign theo location
@@ -37,12 +42,16 @@ public class task_without_streaming {
         Dataset<Row> df4 = df3.groupBy("date", "location", "campaign").agg(sum("count").as("sum"));
         df3.createOrReplaceTempView("df3");
         df4.createOrReplaceTempView("df4");
-        Dataset<Row> ex2 = spark.sql("select df4.date, df4.location, df4.campaign, df4.sum, ifnull(df3.count, 0) as view, ifnull(df4.sum-df3.count, sum) as click " +
-                "from df3 right join df4 " +
-                "on df4.date=df3.date and df3.campaign=df4.campaign and df3.location=df4.location and df3.cov=0 " +
-                "order by df4.date desc, df4.location desc, df4.campaign desc");
+        Dataset<Row> ex2 = spark.sql("select df4.date, df4.location, df4.campaign, df4.sum, ifnull(df3.count, 0) as view, ifnull(df4.sum-df3.count, sum) as click "
+                + "from df3 right join df4 "
+                + "on df4.date=df3.date and df3.campaign=df4.campaign and df3.location=df4.location and df3.cov=0 "
+                + "order by df4.date desc, df4.location desc, df4.campaign desc");
         ex2.show();
-        ex2.write().option("delimiter", ";").option("header", "true").mode(SaveMode.Overwrite).csv(resultFolder + "/resultExercise2");
+        ex2.write()
+                .option("delimiter", ";")
+                .option("header", "true")
+                .mode(SaveMode.Overwrite)
+                .csv(resultFolder + "/resultExercise2");
 
 //        Tìm tỉ lệ click, tỉ lệ view ứng vỡi mỗi campaign
 //        Dataset<Row> df1 = df.groupBy("date", "campaign", "cov").count();
@@ -74,7 +83,12 @@ public class task_without_streaming {
                 .agg(countDistinct("guid").alias("count")).
                 orderBy(col("date").desc(), col("campaign").desc());
         ex3.show();
-        ex3.write().option("delimiter", ";").option("header", "true").mode(SaveMode.Overwrite).csv(resultFolder + "/resultExercise3");
+        ex3
+                .write()
+                .option("delimiter", ";")
+                .option("header", "true")
+                .mode(SaveMode.Overwrite)
+                .csv(resultFolder + "/resultExercise3");
 
 //      Số lượng user truy cập nhiều hơn một campaign
         Dataset<Row> ex4 = df.groupBy("date", "guid")
@@ -83,7 +97,12 @@ public class task_without_streaming {
                 .groupBy("date").agg(count("guid"))
                 .orderBy(col("date").desc());
         ex4.show();
-        ex4.write().option("delimiter", ";").option("header", "true").mode(SaveMode.Overwrite).csv(resultFolder + "/resultExercise4");
+        ex4
+                .write()
+                .option("delimiter", ";")
+                .option("header", "true")
+                .mode(SaveMode.Overwrite)
+                .csv(resultFolder + "/resultExercise4");
 
     }
 }

@@ -10,7 +10,8 @@ import static org.apache.spark.sql.functions.*;
 
 public class Kafka {
     public static void main(String[] args) {
-        String kafkaServer = "10.3.68.20:9092, 10.3.68.21:9092, 10.3.68.23:9092, 10.3.68.26:9092, 10.3.68.28:9092, 10.3.68.32:9092, 10.3.68.47:9092, 10.3.68.48:9092, 10.3.68.50:9092, 10.3.68.52:9092";
+        String kafkaServer = "10.3.68.20:9092, 10.3.68.21:9092, 10.3.68.23:9092, 10.3.68.26:9092, 10.3.68.28:9092, " +
+                "10.3.68.32:9092, 10.3.68.47:9092, 10.3.68.48:9092, 10.3.68.50:9092, 10.3.68.52:9092";
         String kafkaTopic = "rt-queue_1";
         String savedDataLocation = "spark_task_intern/data";
         String checkpoint = "spark_task_intern/checkpoint/Kafka";
@@ -71,7 +72,7 @@ public class Kafka {
                     .outputMode("append")
                     .option("path", savedDataLocation)
                     .option("header", true)
-                    .option("checkpointLocation", checkpoint +"/data")
+                    .option("checkpointLocation", checkpoint+"/data")
                     .trigger(Trigger.ProcessingTime("60 minute"))
                     .partitionBy("year", "month", "day")
                     .start()

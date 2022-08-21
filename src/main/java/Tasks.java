@@ -7,9 +7,9 @@ import java.util.concurrent.TimeoutException;
 import static org.apache.spark.sql.functions.*;
 
 public class Tasks {
-    String resultFolder = "spark_task_intern/result";
-    String checkpoint ="spark_task_intern/checkpoint/Task";
-    String sourceFile = "spark_task_intern/data";
+    private String resultFolder = "spark_task_intern/result";
+    private String checkpoint = "spark_task_intern/checkpoint/Task";
+    private String sourceFile = "spark_task_intern/data";
 
     public Dataset<Row> read(){
         SparkSession spark = SparkSession
@@ -98,7 +98,7 @@ public class Tasks {
                     .start()
                     .awaitTermination();
         }
-        catch (TimeoutException|StreamingQueryException e){
+        catch (TimeoutException | StreamingQueryException e){
             e.printStackTrace();
         }
 
