@@ -1,4 +1,50 @@
-Đề bài:
+Đề bài: Lấy dữ liệu từ các kafka broker sau:
+
+* Tên topic: rt-queue_1
+
+* Host:  10.3.68.20:9092,10.3.68.21:9092,10.3.68.23:9092,10.3.68.26:9092, 10.3.68.28:9092, 10.3.68.32:9092, 10.3.68.47:9092, 10.3.68.48:9092, 10.3.68.50:9092, 10.3.68.52:9092 
+
+* Message: Mỗi trường cách nhau bởi dấu '\t'  
+
+{  
+
+timeLog: thời gian xuất hiện log( thời gian lên quảng cáo)  
+
+ip:  
+
+userAgent:  
+
+GUIDTime:   
+
+bannerId:  id của banner quảng cáo.  
+
+viewCount:  
+
+GUID: Định danh người dùng duy nhất.  
+
+admDomain:  
+
+tp:  
+
+cov: click or view. banner có được click hay chỉ lướt qua.
+
+zoneID:vị trí quảng cáo lên website.  
+
+campaign: một id thể hiện chiến dịch quảng cáo gồm 1 list các banner.  
+
+channelID:  
+
+isNew:  
+
+referer:  
+
+regionInfo.Value  
+
+tid  
+
+price: giá lên quảng cáo tại vị trí zoneId.  
+
+}
 
 Xử lý lưu trữ dữ liệu theo campaignID vào database 1 giờ 1 lần và đảm bảo các truy vấn sau:
 
